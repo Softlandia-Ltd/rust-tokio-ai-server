@@ -9,6 +9,7 @@ pub mod conversations;
 
 const X_USER_ID: &str = "X-User-ID";
 
+#[derive(Debug)]
 pub struct ExtractUser(pub Uuid);
 
 #[async_trait]

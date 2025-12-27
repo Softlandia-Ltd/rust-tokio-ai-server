@@ -4,14 +4,14 @@ use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 use uuid::Uuid;
 
-#[derive(Debug, FromRow)]
+#[derive(Debug, Clone, FromRow)]
 pub struct Conversation {
     pub id: Uuid,
     pub user: Uuid,
     pub created_at: DateTime<Utc>,
 }
 
-#[derive(Debug, sqlx::Type)]
+#[derive(Debug, Clone, sqlx::Type)]
 #[repr(u8)]
 pub enum MessageKind {
     System = 1,
@@ -19,7 +19,7 @@ pub enum MessageKind {
     User = 3,
 }
 
-#[derive(Debug, FromRow)]
+#[derive(Debug, Clone, FromRow)]
 pub struct Message {
     pub id: Uuid,
     pub conversation_id: Uuid,

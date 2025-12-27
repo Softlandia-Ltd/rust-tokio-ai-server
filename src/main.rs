@@ -2,15 +2,15 @@
 //!
 //! (c) Softlandia 2025
 
-mod api;
-mod core;
-mod infrastructure;
+use tokio_local_llm_api::TASK_SENDER;
+use tokio_local_llm_api::api;
+use tokio_local_llm_api::core;
+use tokio_local_llm_api::core::assistant::{ChatMessage, InferenceTask};
+use tokio_local_llm_api::core::services::MyConversationService;
+use tokio_local_llm_api::core::traits::ConversationService;
+use tokio_local_llm_api::infrastructure::database::DatabaseConnection;
+use tokio_local_llm_api::infrastructure::repositories::DbConversationRepository;
 
-use crate::core::assistant::{ChatMessage, InferenceTask};
-use crate::core::services::MyConversationService;
-use crate::core::traits::ConversationService;
-use crate::infrastructure::database::DatabaseConnection;
-use crate::infrastructure::repositories::DbConversationRepository;
 use anyhow::anyhow;
 use axum::http::{HeaderValue, Method};
 use axum::response::Html;
@@ -39,8 +39,6 @@ use tower_http::services::ServeDir;
 use uuid::Uuid;
 
 const ENABLE_TELEGRAM_HANDLER: bool = false;
-
-pub static TASK_SENDER: OnceCell<mpsc::Sender<InferenceTask>> = OnceCell::const_new();
 
 fn main() -> anyhow::Result<()> {
     // initialize tracing

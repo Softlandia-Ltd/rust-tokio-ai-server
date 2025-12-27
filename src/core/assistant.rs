@@ -289,3 +289,105 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
 }
 
 pub async fn forward(transformer: &Llama2) {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::infrastructure::entities;
+    use chrono::Utc;
+    use uuid::Uuid;
+
+    #[test]
+    fn test_chat_message_from_user_entity() {
+        let user_message = entities::Message {
+            id: Uuid::new_v4(),
+            conversation_id: Uuid::new_v4(),
+            kind: entities::MessageKind::User,
+            created_at: Utc::now(),
+            text: "Hello".to_string(),
+        };
+
+        let chat_message: ChatMessage = user_message.into();
+        assert!(matches!(chat_message.role, Role::User));
+        assert_eq!(chat_message.content, "Hello");
+    }
+
+    #[test]
+    fn test_chat_message_from_bot_entity() {
+        let bot_message = entities::Message {
+            id: Uuid::new_v4(),
+            conversation_id: Uuid::new_v4(),
+            kind: entities::MessageKind::Bot,
+            created_at: Utc::now(),
+            text: "Hi there!".to_string(),
+        };
+
+        let chat_message: ChatMessage = bot_message.into();
+        assert!(matches!(chat_message.role, Role::Assistant));
+        assert_eq!(chat_message.content, "Hi there!");
+    }
+
+    #[test]
+    fn test_chat_message_from_system_entity() {
+        let system_message = entities::Message {
+            id: Uuid::new_v4(),
+            conversation_id: Uuid::new_v4(),
+            kind: entities::MessageKind::System,
+            created_at: Utc::now(),
+            text: "You are an assistant".to_string(),
+        };
+
+        let chat_message: ChatMessage = system_message.into();
+        assert!(matches!(chat_message.role, Role::System));
+        assert_eq!(chat_message.content, "You are an assistant");
+    }
+
+    #[test]
+    fn test_chat_message_as_jinja_value() {
+        let message = ChatMessage {
+            role: Role::User,
+            content: "Test message".to_string(),
+        };
+
+        let jinja_val = message.as_jinja_value();
+        // Verify structure without full minijinja inspection
+        assert!(jinja_val.as_object().is_some());
+    }
+
+    #[tokio::test]
+    async fn test_inference_task_new_creates_channel() {
+        let messages = vec![ChatMessage {
+            role: Role::User,
+            content: "Hello".to_string(),
+        }];
+
+        let (task, mut receiver) = InferenceTask::new(messages);
+
+        // Should be able to send a token
+        task.return_channel.send("test".to_string()).await.unwrap();
+
+        // Should be able to receive it
+        let received = receiver.recv().await;
+        assert_eq!(received, Some("test".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_inference_task_as_jinja_input() {
+        let messages = vec![
+            ChatMessage {
+                role: Role::System,
+                content: "System prompt".to_string(),
+            },
+            ChatMessage {
+                role: Role::User,
+                content: "User message".to_string(),
+            },
+        ];
+
+        let (task, _) = InferenceTask::new(messages);
+        let jinja_input = task.as_jinja_input();
+
+        // Verify it's structured properly
+        assert!(jinja_input.as_object().is_some());
+    }
+}
