@@ -1,0 +1,41 @@
+[package]
+name = "tokio-local-llm-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "0.7.9", features=["http2"]}
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.46.1", features = ["rt-multi-thread"] }
+tracing-subscriber = "0.3.19"
+log = "0.4.27"
+more-di-axum = "0.2.0"
+uuid = { version = "1.17.0", features = ["serde", "v4"] }
+chrono = { version = "0.4.41", features = ["now", "serde"] }
+more-di = { version = "3.1.0", features = ["async"] }
+sqlx = { version = "0.8.6", features = ["chrono", "runtime-tokio", "sqlite", "uuid"] }
+dotenvy = "0.15.7"
+async-trait = "0.1.88"
+wgml = { path = "..\\wgml\\crates\\wgml" }
+memmap2 = "0.9.5"
+minijinja = "2.11.0"
+wgcore = { path = "..\\wgmath\\crates\\wgcore" }
+bytemuck = "1.23.2"
+nalgebra = { version = "0.33.1", features = ["convert-bytemuck"] }
+teloxide = "0.17.0"
+anyhow = "1.0.98"
+futures-util = "0.3.31"
+async-stream = "0.3.6"
+tower-http = { version = "0.6.6", features = ["cors", "fs"] }
+tower = { version = "0.5.2", features = ["tokio", "tokio-stream"] }
+
+[patch.crates-io]
+#wgcore-derive = { path = "../wgmath/crates/wgcore-derive" }
+#wgcore = { path = "../wgmath/crates/wgcore" }
+#wgebra = { path = "../wgmath/crates/wgebra" }
+
+wgcore-derive = { path = "..\\wgmath\\crates\\wgcore-derive" }
+wgcore = { path = "..\\wgmath\\crates\\wgcore" }
+wgebra = { path = "..\\wgmath\\crates\\wgebra" }
+
+encase = { git = "https://github.com/sebcrozet/encase", branch = "nalgebra-points" }
