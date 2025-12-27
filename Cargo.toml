@@ -16,10 +16,10 @@ more-di = { version = "3.1.0", features = ["async"] }
 sqlx = { version = "0.8.6", features = ["chrono", "runtime-tokio", "sqlite", "uuid"] }
 dotenvy = "0.15.7"
 async-trait = "0.1.88"
-wgml = { path = "..\\wgml\\crates\\wgml" }
+wgml = { git = "https://github.com/wgmath/wgml" }
 memmap2 = "0.9.5"
 minijinja = "2.11.0"
-wgcore = { path = "..\\wgmath\\crates\\wgcore" }
+wgcore = { git = "https://github.com/dimforge/wgmath", rev = "95538845080ef8680cf9906f1949623e30be3495" }
 bytemuck = "1.23.2"
 nalgebra = { version = "0.33.1", features = ["convert-bytemuck"] }
 teloxide = "0.17.0"
@@ -42,8 +42,8 @@ serial_test = "3"
 #wgcore = { path = "../wgmath/crates/wgcore" }
 #wgebra = { path = "../wgmath/crates/wgebra" }
 
-wgcore-derive = { path = "..\\wgmath\\crates\\wgcore-derive" }
-wgcore = { path = "..\\wgmath\\crates\\wgcore" }
-wgebra = { path = "..\\wgmath\\crates\\wgebra" }
+wgcore-derive = { git = "https://github.com/dimforge/wgmath", rev = "95538845080ef8680cf9906f1949623e30be3495" }
+wgcore = { git = "https://github.com/dimforge/wgmath", rev = "95538845080ef8680cf9906f1949623e30be3495" }
+wgebra = { git = "https://github.com/dimforge/wgmath", rev = "95538845080ef8680cf9906f1949623e30be3495" }
 
 encase = { git = "https://github.com/sebcrozet/encase", branch = "nalgebra-points" }

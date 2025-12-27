@@ -3843,6 +3843,7 @@ dependencies = [
 [[package]]
 name = "wgcore"
 version = "0.2.2"
+source = "git+https://github.com/dimforge/wgmath?rev=95538845080ef8680cf9906f1949623e30be3495#95538845080ef8680cf9906f1949623e30be3495"
 dependencies = [
  "anyhow",
  "async-channel",
@@ -3860,6 +3861,7 @@ dependencies = [
 [[package]]
 name = "wgcore-derive"
 version = "0.2.0"
+source = "git+https://github.com/dimforge/wgmath?rev=95538845080ef8680cf9906f1949623e30be3495#95538845080ef8680cf9906f1949623e30be3495"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -3870,6 +3872,7 @@ dependencies = [
 [[package]]
 name = "wgebra"
 version = "0.2.0"
+source = "git+https://github.com/dimforge/wgmath?rev=95538845080ef8680cf9906f1949623e30be3495#95538845080ef8680cf9906f1949623e30be3495"
 dependencies = [
  "bytemuck",
  "encase",
@@ -3882,6 +3885,7 @@ dependencies = [
 [[package]]
 name = "wgml"
 version = "0.2.0"
+source = "git+https://github.com/wgmath/wgml#41873096d9110cef1d4709f22ee07410d7826a3e"
 dependencies = [
  "anyhow",
  "async-channel",

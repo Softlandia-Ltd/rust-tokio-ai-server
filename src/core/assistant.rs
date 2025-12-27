@@ -14,7 +14,6 @@ use tokio::time::Instant;
 use uuid::timestamp::context;
 use wgcore::gpu::GpuInstance;
 use wgcore::kernel::CommandEncoderExt;
-use wgcore::re_exports::wgpu::{Backends, InstanceDescriptor, InstanceFlags};
 use wgcore::shapes::ViewShapeBuffers;
 use wgml::gguf::Gguf;
 use wgml::models::gpt2::Gpt2Tokenizer;
@@ -109,11 +108,7 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
         gguf_start_time.elapsed().as_secs_f32()
     );
 
-    let gpu = GpuInstance::new(&InstanceDescriptor {
-        backends: Backends::VULKAN,
-        flags: InstanceFlags::empty(),
-        backend_options: Default::default(),
-    })
+    let gpu = GpuInstance::new()
     .await
     .expect("failed to create GPU");
     let device = gpu.device();
@@ -191,14 +186,13 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
                     if token < (config.vocab_size / 2) {
                         state.x.copy_from_view(
                             &mut encoder,
-                            weights.token_embd.0.column(token as u32),
+                            weights.token_embd.column(token as u32),
                         );
                     } else {
                         state.x.copy_from_view(
                             &mut encoder,
                             weights
                                 .token_embd
-                                .1
                                 .column((token - config.vocab_size / 2) as u32),
                         );
                     }
@@ -222,7 +216,6 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
                         &config,
                         &attn_params,
                         pos as u32,
-                        is_prefill,
                     );
                     drop(compute_pass);
 
