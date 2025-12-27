@@ -108,9 +108,7 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
         gguf_start_time.elapsed().as_secs_f32()
     );
 
-    let gpu = GpuInstance::new()
-    .await
-    .expect("failed to create GPU");
+    let gpu = GpuInstance::new().await.expect("failed to create GPU");
     let device = gpu.device();
     info!("GPU device created.");
     info!("GPU device features: {:?}", device.features());
@@ -184,10 +182,9 @@ pub async fn background_task(mut task_queue: mpsc::Receiver<InferenceTask>) -> (
                     );
 
                     if token < (config.vocab_size / 2) {
-                        state.x.copy_from_view(
-                            &mut encoder,
-                            weights.token_embd.column(token as u32),
-                        );
+                        state
+                            .x
+                            .copy_from_view(&mut encoder, weights.token_embd.column(token as u32));
                     } else {
                         state.x.copy_from_view(
                             &mut encoder,

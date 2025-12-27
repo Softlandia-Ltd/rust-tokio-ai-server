@@ -76,6 +76,19 @@ cargo test --test '*'        # Integration tests only
 cargo test -- --nocapture    # Show println! output
 ```
 
+### Running Inference Tests
+Inference tests require a GGUF model file and are ignored by default:
+```bash
+# Run inference tests (requires model file in models/ directory)
+cargo test --test inference_tests -- --ignored
+
+# Run all tests including ignored ones
+cargo test -- --include-ignored
+
+# Use a custom model path
+MODEL_FILE_NAME=models/my-model.gguf cargo test --test inference_tests -- --ignored
+```
+
 ### Database Setup
 Requires `.env` file with `DATABASE_URL=sqlite:./database.db`. SQLx uses lazy connection pooling (max 5 connections). Run migrations manually with sqlx-cli if needed.
 
